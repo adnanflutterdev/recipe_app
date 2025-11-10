@@ -1,9 +1,13 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/app_colors.dart';
+import 'package:recipe_app/home_screen.dart';
+import 'package:recipe_app/sign_up_screen.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
+  // late bool isSignIn = widget.isSignIn;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,11 +27,11 @@ class SignInScreen extends StatelessWidget {
               const SizedBox(height: 50),
 
               // email field
-              const Text('Name'),
+              const Text('Email'),
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Enter email',
-                  hintStyle: TextStyle(color: hintColor, fontSize: 12),
+                  hintStyle: TextStyle(color: grey, fontSize: 12),
                   // enabled: false,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -45,7 +49,7 @@ class SignInScreen extends StatelessWidget {
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Enter password',
-                  hintStyle: TextStyle(color: hintColor, fontSize: 12),
+                  hintStyle: TextStyle(color: grey, fontSize: 12),
                   // enabled: false,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -71,11 +75,9 @@ class SignInScreen extends StatelessWidget {
                 height: 60,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    Navigator.of(context).push(
+                    Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) {
-                          return const SignInScreen();
-                        },
+                        builder: (context) => const HomeScreen(),
                       ),
                     );
                   },
@@ -115,6 +117,67 @@ class SignInScreen extends StatelessWidget {
                     ),
                     Expanded(child: Divider(color: border, thickness: 3)),
                   ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [BoxShadow(color: shadow, blurRadius: 5)],
+                    ),
+                    child: Image.asset('assets/images/google.png'),
+                  ),
+                  const SizedBox(width: 25),
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [BoxShadow(color: shadow, blurRadius: 5)],
+                    ),
+                    child: Image.asset('assets/images/facebook.png'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              Center(
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Don\'t have an account?',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: black,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: ' Sign up',
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const SignUpScreen();
+                                },
+                              ),
+                            );
+                          },
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: secondary,
+
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

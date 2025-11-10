@@ -50,7 +50,7 @@ class SplashScreen extends StatelessWidget {
                 // 3rd child
                 ElevatedButton.icon(
                   onPressed: () {
-                    Navigator.of(context).push(
+                    Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) {
                           return const SignInScreen();
