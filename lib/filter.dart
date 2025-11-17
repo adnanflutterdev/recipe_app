@@ -32,7 +32,6 @@ class _FilerState extends State<Filter> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     print('Init Called');
   }
