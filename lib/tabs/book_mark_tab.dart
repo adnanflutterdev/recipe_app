@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_app/app_colors.dart';
+import 'package:recipe_app/ingrediends_screen.dart';
 
 class BookMarkTab extends StatefulWidget {
   const BookMarkTab({super.key});
@@ -29,6 +30,7 @@ class _BookMarkTabState extends State<BookMarkTab> {
         return recipes;
       } else {
         print('Error');
+        print(response.body);
         return {};
       }
     } catch (err) {
@@ -55,6 +57,16 @@ class _BookMarkTabState extends State<BookMarkTab> {
             }
             if (snapshot.data == null || snapshot.data!.isEmpty) {
               return const Text('No Saved Recipes');
+              // return TextButton(
+              //   onPressed: () {
+              //     Navigator.of(context).push(
+              //       MaterialPageRoute(
+              //         builder: (context) => const IngrediendsScreen(),
+              //       ),
+              //     );
+              //   },
+              //   child: const Text('Ingredients'),
+              // );
             }
             List allRecipe = snapshot.data!['recipes'];
             return Expanded(
@@ -66,105 +78,121 @@ class _BookMarkTabState extends State<BookMarkTab> {
                     Map recipe = allRecipe[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 150,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          color: grey,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Stack(
-                          children: [
-                            // BG image
-                            SizedBox(
-                              width: double.infinity,
-                              height: 150,
-                              child: Image.network(
-                                recipe['image'],
-                                fit: BoxFit.fitWidth,
-                              ),
+                      child: GestureDetector(
+                        onTap: () {
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const IngrediendsScreen(),
+                          //   ),
+                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => IngrediendsScreen(recipe: recipe,),
                             ),
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 150,
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            color: grey,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Stack(
+                            children: [
+                              // BG image
+                              SizedBox(
+                                width: double.infinity,
+                                height: 150,
+                                child: Image.network(
+                                  recipe['image'],
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
 
-                            Container(
-                              color: black.withValues(alpha: 0.4),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.topRight,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: secondary,
-                                          borderRadius: BorderRadius.circular(
-                                            10,
+                              Container(
+                                color: black.withValues(alpha: 0.4),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topRight,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: secondary,
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
                                           ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0,
-                                            vertical: 8,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 15.0,
+                                              vertical: 8,
+                                            ),
+                                            child: Text('${recipe['rating']}'),
                                           ),
-                                          child: Text('${recipe['rating']}'),
                                         ),
                                       ),
-                                    ),
-                                    const Spacer(),
-                                    SizedBox(
-                                      width: width,
+                                      const Spacer(),
+                                      SizedBox(
+                                        width: width,
 
-                                      child: Text(
-                                        recipe['name'],
+                                        child: Text(
+                                          recipe['name'],
+                                          style: TextStyle(
+                                            color: white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        recipe['mealType'][0],
                                         style: TextStyle(
                                           color: white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
                                         ),
                                       ),
-                                    ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              Positioned(
+                                bottom: 10,
+                                right: 10,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.timer, color: white),
                                     Text(
-                                      recipe['mealType'][0],
-                                      style: TextStyle(
+                                      '${recipe['cookTimeMinutes']} mins',
+                                      style: TextStyle(color: white),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      decoration: BoxDecoration(
                                         color: white,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Icon(
+                                          Icons.bookmark_outline,
+                                          color: primary,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ),
-
-                            Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.timer, color: white),
-                                  Text(
-                                    '${recipe['cookTimeMinutes']} mins',
-                                    style: TextStyle(color: white),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: white,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Icon(
-                                        Icons.bookmark_outline,
-                                        color: primary,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     );
